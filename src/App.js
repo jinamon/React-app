@@ -11,7 +11,7 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      mode:'welcome',
+      mode:'read',
       welcome:{title:'Welcome', desc:'Welcome React!'},
       //state값을 초기화한다. subject의 값을 state화 시킬거임, subject의 프로퍼티(props)값으로 
       subject : {title : 'WEB', sub: 'World wide web!'},
@@ -23,6 +23,9 @@ class App extends Component{
       ]
     }
   }
+  //render : 어떤 html을 그릴것인지 결정하는 함수
+  // prop나 state의 값이 바뀌면 해당되는 컴퍼넌트의 랜더 함수가 호출되도록 약속되어있다. -> 화면이 다시 그려진다
+
   render(){
     console.log('App Render');
     var _title, _desc = null;
@@ -33,12 +36,26 @@ class App extends Component{
       _title= this.state.contents[0].title;
       _desc = this.state.contents[0].desc;
     }
+    console.log('render',this);
     return(
       <div className="APP">
-        <Subject 
+        {/* <Subject 
           title={this.state.subject.title} 
           sub={this.state.subject.sub}>
-        </Subject>
+        </Subject> */}
+        <header>
+          <h1><a href="/" onClick={function(e){
+            console.log(e);
+            //이벤트가 발생한 태그의 기본적인 동작 방법을 못하게 막는 함수
+            e.preventDefault();
+            //this.state.mode = 'welcome'; 이렇게 하고싶다
+            //bind를 한 다음에 setState를 이용해서 state를 바꿔주어야 한다.
+            this.setState({
+              mode:'welcome'
+            });
+          }.bind(this)}>{this.state.subject.title}</a></h1>
+          {this.state.subject.sub}
+        </header>
         {/* data라고 하는 props 로 컨텐츠를 주입 */}
         <TOC data={this.state.contents}></TOC>
         <Content title={_title} desc={_desc}></Content>
